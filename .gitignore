@@ -1,21 +1,14 @@
-# R and system files
 .Rhistory
 .RData
 .Rproj.user/
 .DS_Store
 
-# Quarto and HTML build artifacts (keep main HTML and DataVizV2_files for GitHub Pages)
 *.log
 *.aux
 *.out
 *.toc
 *.tmp
 
-# If you want to ignore all auto-generated figures and libraries, uncomment below:
-# DataVizV2_files/figure-revealjs/
-# DataVizV2_files/libs/
 
-data/
 figure-revealjs
 libs
-# Remove above line if you want to track data files in git 
