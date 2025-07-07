@@ -43,16 +43,6 @@ These datasets are used to generate the visualizations and analyses in the prese
      ```
    - This will generate `DataVizV2.html`, which you can open in your browser.
 
-## Publishing to GitHub
-
-- **Recommended folder structure:**
-  - Keep all data and source files in the root or organize data into a `data/` subfolder for clarity.
-  - Only commit the rendered HTML (`DataVizV2.html`) and the `DataVizV2_files/` folder if you want to share the output online (e.g., with GitHub Pages).
-
-- **To publish with GitHub Pages:**
-  1. Push your repository to GitHub.
-  2. In your repo settings, enable GitHub Pages and set the source to the branch and folder containing `DataVizV2.html` (often `main` branch, `/root` or `/docs` folder).
-  3. Rename `DataVizV2.html` to `index.html` if you want it as the homepage.
 
 ## Credits
 
