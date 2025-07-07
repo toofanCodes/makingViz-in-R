@@ -1,0 +1,768 @@
+---
+format: revealjs
+editor: visual
+---
+
+```{=html}
+<style>
+    .reveal .center {
+        text-align: center;
+        font-size: 3em;
+    }
+</style>
+```
+
+::: center
+```         
+Visualizing Growth
+```
+:::
+
+<p style="font-size: 20px;">
+
+*- Saran - Aditi - Pooja Patil - Pooja Nalam - Pankhuri*
+
+</p>
+
+------------------------------------------------------------------------
+
+#### **Data Definitions & Key Words:**
+
+</br>
+
+<p style="font-size: 20px;">
+
+**GDP** : *Gross Domestic Product, measures the total value of goods and services produced in a country within a specific time frame, indicating its economic size and activity.*
+
+</p>
+
+</br>
+
+<p style="font-size: 20px;">
+
+**Per-Capita GDP** *is the average economic output per person in a country, showing individual wealth on average, basically dividing GDP by population.*
+
+</p>
+
+</br>
+
+<p style="font-size: 20px;">
+
+**Purchase Power Parity** *adjusts GDP for cost of living differences, reflecting real purchasing power across countries.*
+
+</p>
+
+</br>
+
+<p style="font-size: 20px;">
+
+**Inflation** *is the increase in prices of goods and services over time, reducing the purchasing power of money.*
+
+</p>
+
+```{r}
+library(tidyverse)
+library(vtable)
+library(ggplot2)
+library(patchwork)
+library(readxl)
+library(treemap)
+
+data <- read_csv("DVdataset.csv")
+
+dataPivot <- pivot_longer(data, cols = starts_with('2'),
+                          names_to = "Year",
+                          values_to = "Values")
+
+
+customColors <- c('#d9d9d9', '#99ccff', '#ff9900', '#737373', '#0077cc',
+                  '#004066', 'black', "yellow", '#ffd699', '#262626')
+
+
+dataPivot <- dataPivot %>%
+  mutate(Segment = case_when(
+    Country %in% c("India", "Russia") ~ "Group1",
+    Country %in% c("China", "Japan") ~ "Group2",
+    Country %in% c("United Kingdom","Canada" ,"United States",
+                   'Germany',"France", "Italy") ~ "Group3"
+  ))
+
+```
+
+------------------------------------------------------------------------
+
+#### Which countries contributed most to World's GDP in 2022? And is that all matters?
+
+<p style="font-size: 20px;">
+
+Country's share in global GDP growth, 2022
+
+</p>
+
+<p style="font-size: 12px;">
+
+*Source: IMF's World Economic Outlook, Oct 2023*
+
+</p>
+
+```{r}
+gdpShare <- read_excel("gdpShare.xlsx")
+
+gdpShare %>%
+  filter(Year == '2022') %>%
+  mutate(
+    labelsNew = paste0(Country, ": ", round(Values), "%")
+  ) %>%
+  treemap(
+    index = "labelsNew",
+    vSize = "Values",
+    type = "index",
+    algorithm = "squarified",
+    palette= "RdBu", # RdYlBu, Set2, RdGy, Pastel2, Spectral, RdBu
+    title = "",
+    mirror.y = TRUE,
+    fontsize.labels = 12
+    )
+
+```
+
+------------------------------------------------------------------------
+
+#### 21<sup>st</sup> Century saw US sustain its dominance, while emerging Asian powerhouses China and India surge
+
+<p style="font-size: 20px;">
+
+Countries ranked by GDP size
+
+</p>
+
+<p style="font-size: 12px;">
+
+*Source: IMF's World Economic Outlook, Oct 2023*
+
+</p>
+
+```{r}
+
+legend_order <- c("United States", "China", "Japan", 
+                  "Germany", "India", "United Kingdom", 
+                  "France", "Russia", "Canada", "Italy")
+library(readxl)
+pivot3 <- read_excel("pivot3.xlsx")
+
+pivot3 %>%
+  filter(!(Country %in% c("Mexico", "Spain", "Brazil"))) %>%
+  ggplot(aes(x = Year, y = Values, group = Country, color = Country)) +
+  
+  geom_point(data = . %>% filter(!(Country 
+                                   %in% c("United States", "China", "India"))),
+             size = 3.5) +
+  geom_point(data = . %>% filter(Country 
+                                   %in% c("United States", "China", "India")),
+             size = 8) +
+  geom_smooth(data = . %>% filter(!(Country %in% c("United States", "China", "India"))),
+              method = "loess", span = 0.75, se = FALSE, size = 0.5) +
+  geom_smooth(data = . %>% filter(Country %in% c("United States", "China", "India")),
+            method = "loess", span = 0.75, se = FALSE, size = 1.5) +
+  scale_y_reverse() +
+  geom_text(data = . %>% filter(Country %in% c("United States", "China", "India")),
+            aes(label = Values), 
+            vjust = 0.4, size = 3, 
+            color = 'white', fontface = 'bold') +
+  geom_text(aes(x = 2023, y = 1), color = 'black', label = "United States", 
+            hjust = 0, size = 4, check_overlap = TRUE) +
+  geom_text(aes(x = 2023, y = 2), color = 'black', label = "China", 
+            hjust = 0, size = 4, check_overlap = TRUE) +
+  geom_text(aes(x = 2023, y = 5), color = 'black', label = "India", 
+            hjust = 0, size = 4, check_overlap = TRUE) +
+  geom_text(aes(x = 2023, y = 3, color = 'black'), label = "Japan", 
+            hjust = 0, size = 4, check_overlap = TRUE) +
+  geom_text(aes(x = 2023, y = 4, color = 'black'), label = "Germany", 
+            hjust = 0, size = 4, check_overlap = TRUE) +
+  geom_text(aes(x = 2023, y = 6, color = 'black'), label = "United Kingdom", 
+            hjust = 0, size = 4, check_overlap = TRUE) +
+  geom_text(aes(x = 2023, y = 7, color = 'black'), label = "France", 
+            hjust = 0, size = 4, check_overlap = TRUE) +
+  geom_text(aes(x = 2023, y = 8, color = 'black'), label = "Russia", 
+            hjust = 0, size = 4, check_overlap = TRUE) +
+  geom_text(aes(x = 2023, y = 9, color = 'black'), label = "Canada", 
+            hjust = 0, size = 4, check_overlap = TRUE) +
+  geom_text(aes(x = 2023, y = 10, color = 'black'), label = "Italy", 
+            hjust = 0, size = 4, check_overlap = TRUE) +
+  theme_minimal() +
+  scale_color_manual(values = c("United States" = "#CA6702",
+                                "China" = "#ff9900",
+                                "Japan" = "#E9D8A6",
+                                "Germany" = '#A3C4F3',
+                                "India" = "#0077cc",
+                                "United Kingdom" = "#FDE4CF",
+                                "France" = "lightgrey",
+                                "Russia" = "#94D2BD",
+                                "Italy" = "darkgrey",
+                                "Canada" = "#F9C74F")) +
+  scale_x_continuous(breaks = c(2001,2011,2022)) +
+  theme(
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.title.y = element_text(face = "bold"), 
+        axis.text.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_line(size = 2),
+        axis.text.x = element_text(size = 10),
+        x = NULL,
+        y = NULL,
+        plot.title = element_text(face = "bold"),
+        legend.position = "none"
+      ) +
+  labs(y = "YEARLY RANKINGS", size = 12)
+```
+
+------------------------------------------------------------------------
+
+#### What is their populations? If each country looks so different, is it right to compare by their GDP alone?
+
+<p style="font-size: 20px;">
+
+Population trends over the past 2 decades, and current standing
+
+</p>
+
+<p style="font-size: 12px;">
+
+*Source: IMF's World Economic Outlook, Oct 2023*
+
+</p>
+
+```{r}
+
+population <- read_csv("population.csv")
+
+
+p5 <- ggplot(population, aes(x = Year, y = id)) +
+  geom_ribbon(aes(ymin = l, ymax = h, fill = Country), alpha = 0.6) +
+  scale_fill_manual(values = c("United States" = "#CA6702",
+                               "China" = "#ff9900",
+                               "Japan" = "#E9D8A6",
+                               "Germany" = '#A3C4F3',
+                               "India" = "#0077cc",
+                               "United Kingdom" = "#FDE4CF",
+                               "France" = "lightgrey",
+                               "Russia" = "#94D2BD",
+                               "Italy" = "darkgrey",
+                               "Canada" = "#F9C74F")) +
+  geom_text(aes(x=2019,y=1650, label = "India"), 
+            check_overlap = TRUE, size = 4) +
+  geom_text(aes(x=2019,y=2850, label = "China"), 
+            check_overlap = TRUE, size = 4) +
+  geom_text(aes(x=2019,y=800, label = "United States"), 
+            check_overlap = TRUE, size = 4) +
+  labs(x = "YEAR", y = "POPULATION (in millions)") +
+  scale_x_continuous(breaks = c(2001,2011,2022), limits = c(2001,2025)) +
+  scale_y_continuous(breaks = c()) + 
+  theme_minimal() +
+  theme(axis.title.x = element_text(face = "bold"),
+        axis.title.y = element_text(face = "bold"),
+        legend.text = element_text(size = 7),
+        legend.position = "none",
+        axis.ticks.x = element_line(size = 2),
+        panel.grid.major.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        plot.title = element_text(face = "bold"),
+  ) 
+
+
+p6 <- population %>%
+  filter(Year == 2022) %>%
+  ggplot(aes(x = Values, y = reorder(Country, Values), fill = Country)) +
+  geom_col(alpha = 0.6) +
+  scale_fill_manual(values = c("United States" = "#CA6702",
+                               "China" = "#ff9900",
+                               "Japan" = "#E9D8A6",
+                               "Germany" = '#A3C4F3',
+                               "India" = "#0077cc",
+                               "United Kingdom" = "#FDE4CF",
+                               "France" = "lightgrey",
+                               "Russia" = "#94D2BD",
+                               "Italy" = "darkgrey",
+                               "Canada" = "#F9C74F")) +
+  geom_text(data = . %>% filter(Country %in% c("India", "China", "United States")), 
+            aes(label = round(Values)), hjust = 1.2, color = "white", fontface = "bold", size = 3) + 
+  labs(x = "POPULATION, 2022 in millions",
+       size = 5, fontface = 'bold') +
+  scale_x_continuous(breaks = c(0,800,1500), limits = c(0,1500)) +
+  theme_minimal() +
+  theme(axis.title.x = element_text(face = "bold"),
+        axis.text.y = element_text(face = 'bold'),
+        axis.title.y = element_blank(),
+        legend.text = element_text(size = 7),
+        legend.position = "none",
+        panel.grid.major.y = element_blank(),
+        axis.ticks.x = element_line(size = 2),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        plot.title = element_text(face = "bold")
+  )
+
+combined_plots <- p5 + p6 +
+  plot_layout(ncol = 2, widths = c(3, 1))
+
+print(combined_plots)
+
+```
+
+------------------------------------------------------------------------
+
+##### Beyond sheer GDP numbers, economic prosperity requires a look at per-capita incomes
+
+<p style="font-size: 20px;">
+
+Tracking top 10 countries on per-capita GDP, A comparison among peers
+
+</p>
+
+<p style="font-size: 12px;">
+
+*Source: IMF's World Economic Outlook, Oct 2023*
+
+</p>
+
+```{r}
+
+NGPDPC <- read_excel("NGPDPC.xlsx")
+
+NGPDPC_long <- pivot_longer(NGPDPC, 
+                            cols = `2001`:`2022`, 
+                            names_to = "Year", 
+                            values_to = "NGDPDPC")
+
+
+
+NGPDPC_long$Year <- as.numeric(NGPDPC_long$Year)
+
+NGPDPC_long %>%
+  ggplot(aes(x = Year, y = NGDPDPC, color = Country, 
+               group = Country)) +
+  geom_line() +
+  geom_point(data = function(x) subset(x, 
+                                       Year == max(Year)), 
+             aes(group = Country), size = 8) +
+  annotate("text", x = 2022, y = 90000, 
+           label = "Per-capita Rank", 
+           size = 4, 
+           color = "#064E40", 
+           fontface = "bold",
+           check_overlap = TRUE) + 
+  annotate("text", x = 2028, y = 90000, 
+           label = "GDP Rank", 
+           size = 4, 
+           color = "#0d98ba", 
+           fontface = "bold",
+           check_overlap = TRUE) +
+  annotate("point", x = 2028, y = 76650.250, 
+           size = 8, color = "#CA6702") +
+  annotate("text", x = 2025.2, y = 76650.250, 
+           label = "United States", 
+           size = 4, 
+           color = "#CA6702", 
+           fontface = "bold",
+           check_overlap = TRUE) + 
+  annotate("text", x = 2022, y = 76345.250, 
+           label = "1", 
+           size = 4, 
+           color = "white", 
+           fontface = "bold",
+           check_overlap = TRUE) + 
+  annotate("text", x = 2028, y = 76345.250, 
+           label = "1", 
+           size = 4, 
+           color = "white", 
+           fontface = "bold",
+           check_overlap = TRUE) + 
+  annotate("text", x = 2025.2, y = 12669.620, 
+           label = "China   ", 
+           size = 4, 
+           color = "#ff9900", 
+           fontface = "bold",
+           check_overlap = TRUE) + 
+  annotate("point", x = 2028, y = 12669.620, 
+           size = 8, color = "#ff9900") +
+  annotate("point", x = 2022, y = 12669.620, 
+           size = 8, color = "#ff9900") +
+  annotate("text", x = 2022, y = 12669.620, 
+           label = "9", 
+           size = 4, 
+           color = "white", 
+           fontface = "bold",
+           check_overlap = TRUE) + 
+  annotate("text", x = 2028, y = 12669.620, 
+           label = "2", 
+           size = 4, 
+           color = "white", 
+           fontface = "bold",
+           check_overlap = TRUE) + 
+  annotate("text", x = 2025, y = 2391.870, 
+           label = "India", 
+           size = 4, 
+           color = "#0077cc", 
+           fontface = "bold",
+           check_overlap = TRUE) + 
+  annotate("text", x = 2022, y = 2391.870, 
+           label = "10", 
+           size = 4, 
+           color = "white", 
+           fontface = "bold",
+           check_overlap = TRUE) + 
+  annotate("point", x = 2028, y = 2391.870, 
+           size = 8, color = "#0077cc") +
+  annotate("text", x = 2028, y = 2391.870, 
+           label = "5", 
+           size = 4, 
+           color = "white", 
+           fontface = "bold",
+           check_overlap = TRUE) + 
+  scale_x_continuous(breaks = c(2001, 2011, 2022), limits = c(2001, 2030)) + 
+  scale_y_continuous(labels = scales::dollar_format(prefix = "$", 
+                                                    suffix = "", 
+                                                    big.mark = ","), 
+                     breaks = c(0, 40000, 80000), limits = c(0,90000)) +
+  scale_color_manual(values = c("United States" = "#CA6702",
+                                "China" = "#ff9900",
+                                "Japan" = "#E9D8A6",
+                                "Germany" = '#A3C4F3',
+                                "India" = "#0077cc",
+                                "United Kingdom" = "#FDE4CF",
+                                "France" = "lightgrey",
+                                "Russia" = "#94D2BD",
+                                "Italy" = "darkgrey",
+                                "Canada" = "#F9C74F")) +
+  theme_minimal() +
+  theme(
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    axis.title.x = element_blank(), 
+    axis.title.y = element_text(face = "bold"), 
+    axis.ticks.x = element_line(size = 2),
+    axis.text.x = element_text(size = 10),
+    axis.text.y = element_text(angle = 90, hjust = 0.5, vjust = 0.5,
+                               size = 8, margin = margin(r = -25)),
+    legend.position = 'none',
+    plot.title = element_text(face = "bold")
+  ) +
+  labs(y = "PER-CAPITA GDP ($)")
+
+```
+
+------------------------------------------------------------------------
+
+#### Not all countries have had the same trajectory in Inflation, so is it right to compare countries based on GDP?
+
+<p style="font-size: 20px;">
+
+Inflation across countries (% change)
+
+</p>
+
+<p style="font-size: 12px;">
+
+*Source: IMF's World Economic Outlook, Oct 2023*
+
+</p>
+
+```{r}
+p1 <- dataPivot %>%
+  filter(SbjCode == 'PCPIPCH', Country %in% c('Japan', 'China')) %>%
+  ggplot(aes(y = Values, x = Year, group = interaction(Country, Segment), 
+             color = Country)) +
+  geom_smooth(method = "loess", se = FALSE) +
+  labs(y= "INFLATION RATE(%)") +
+  theme_minimal() + 
+  scale_x_discrete(breaks = c(2001, 2011, 2022)) +
+  scale_y_continuous(limits = c(-5,25)) +
+  scale_color_manual(values = c("United States" = "#CA6702",
+                                "China" = "#ff9900",
+                                "Japan" = "#E9D8A6",
+                                "Germany" = '#A3C4F3',
+                                "India" = "#0077cc",
+                                "United Kingdom" = "#FDE4CF",
+                                "France" = "lightgrey",
+                                "Russia" = "#94D2BD",
+                                "Italy" = "darkgrey",
+                                "Canada" = "#F9C74F"))+
+  theme(legend.position = c(0.809, 0.945),  
+        legend.box.background = element_rect(color = "grey"),
+        legend.text = element_text(size = 8),
+        legend.title = element_text(size = 8),
+        legend.spacing.y = unit(0.2, "cm"),
+        legend.key.width = unit(1, "cm"),  
+        legend.key.height = unit(0.5, "cm"), 
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.ticks.y = element_line(size = 2), 
+        axis.title.y = element_text(face = "bold"), 
+        axis.title.x = element_blank(),
+        axis.ticks.x = element_line(size = 2)
+  )
+
+
+# India and Russia similar trajectories
+p2 <- dataPivot %>%
+  filter(SbjCode == 'PCPIPCH', Country %in% c('India', 'Russia')) %>%
+  ggplot(aes(y = Values, x = Year, group = interaction(Country, Segment), 
+             color = Country)) +
+  geom_smooth(method = "loess", se = FALSE) +
+  theme_minimal() + 
+  scale_x_discrete(breaks = c(2001, 2011, 2022)) +
+  scale_y_continuous(limits = c(-5,25)) +
+  labs( x = 'YEAR', fonftace = 'bold') +
+  scale_color_manual(values = c("United States" = "#CA6702",
+                                "China" = "#ff9900",
+                                "Japan" = "#E9D8A6",
+                                "Germany" = '#A3C4F3',
+                                "India" = "#0077cc",
+                                "United Kingdom" = "#FDE4CF",
+                                "France" = "lightgrey",
+                                "Russia" = "#94D2BD",
+                                "Italy" = "darkgrey",
+                                "Canada" = "#F9C74F")) +
+  theme(legend.position = c(0.803, 0.945),  # Adjust legend position
+        legend.box.background = element_rect(color = "grey"),  # Add border around legend
+        legend.text = element_text(size = 8),  # Adjust legend text size
+        legend.title = element_text(size = 8),  # Adjust legend title size
+        legend.spacing.y = unit(0.2, "cm"),  # Increase vertical spacing between legend items
+        legend.key.width = unit(1, "cm"),  # Adjust the width of the legend key
+        legend.key.height = unit(0.5, "cm"),  # Adjust the height of the legend key
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.title.x = element_text(face = "bold"),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.x = element_line(size = 2)
+        )
+
+# Rest of top 10 have similar
+p3 <- dataPivot %>%
+  filter(SbjCode == 'PCPIPCH', Country %in% c('United Kingdom', 'United States',
+                                              'Canada', 'France', "Germany",
+                                              'Italy')) %>%
+  ggplot(aes(y = Values, x = Year, group = interaction(Country, Segment), 
+             color = Country)) +
+  geom_smooth(method = "loess", se = FALSE) +
+  theme_minimal() + 
+  scale_x_discrete(breaks = c(2001, 2011, 2022)) +
+  scale_y_continuous(limits = c(-5,25)) +
+  scale_color_manual(values = c("United States" = "#CA6702",
+                                "China" = "#ff9900",
+                                "Japan" = "#E9D8A6",
+                                "Germany" = '#A3C4F3',
+                                "India" = "#0077cc",
+                                "United Kingdom" = "#FDE4CF",
+                                "France" = "lightgrey",
+                                "Russia" = "#94D2BD",
+                                "Italy" = "darkgrey",
+                                "Canada" = "#F9C74F")) +
+  theme(legend.position = c(0.7146, 0.845),  # Adjust legend position
+        legend.box.background = element_rect(color = "grey"),  # Add border around legend
+        legend.text = element_text(size = 8),  # Adjust legend text size
+        legend.title = element_text(size = 8),  # Adjust legend title size
+        legend.spacing.y = unit(0.2, "cm"),  # Increase vertical spacing between legend items
+        legend.key.width = unit(1, "cm"),  # Adjust the width of the legend key
+        legend.key.height = unit(0.5, "cm"), # Adjust the height of the legend key
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.title.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.x = element_line(size = 2)
+  )
+
+(p1 + p2 + p3 ) +
+  theme(plot.margin = margin(0.5, 1.8, 0.5, 0.5, "cm"))
+```
+
+------------------------------------------------------------------------
+
+#### A complex yet compelling story - China's ascendancy in Purchasing Power Parity as it surpasses even US
+
+<p style="font-size: 20px;">
+
+Plotting the comparative growth of Economies
+
+</p>
+
+<p style="font-size: 12px;">
+
+*Source: IMF's World Economic Outlook, Oct 2023*
+
+</p>
+
+```{r}
+fdat <- read_csv("percapitaPPP.csv")
+
+fdatPiv <- pivot_longer(fdat, cols = '2001':'2022',
+                        names_to = "Year",
+                        values_to = "Values") %>%
+  rename(SbjCode = 'WEO Subject Code') %>%
+  select('Country', 'SbjCode', 'Year', 'Values')
+
+
+fdatWide <- pivot_wider(fdatPiv, names_from = 'SbjCode',
+                        values_from = "Values")
+
+fdatWide$PPPGDP <- as.numeric(fdatWide$PPPGDP)
+fdatWide$NGDPDPC <- as.numeric(fdatWide$NGDPDPC)
+
+
+fdatWide %>%
+  ggplot(aes(y = NGDPDPC,  x = PPPGDP, color = Country)) +
+  geom_point(size = 1) +
+  labs(
+    x = "PURCHASING POWER PARITY GDP ($)",
+    y = "PER-CAPITA GDP ($)"
+  ) +
+  # stat_smooth(method = 'auto', se = FALSE) +
+  theme_minimal() +
+  scale_x_continuous(breaks = c(0,30000), labels = c('0', '30k')) +
+  scale_y_continuous(breaks = c(0,40000,80000), labels = c('0', '40K', '80K')) +
+  scale_color_manual(values = c("United States" = "#CA6702",
+                                "China" = "#ff9900",
+                                "Japan" = "#E9D8A6",
+                                "Germany" = '#A3C4F3',
+                                "India" = "#0077cc",
+                                "United Kingdom" = "#FDE4CF",
+                                "France" = "lightgrey",
+                                "Russia" = "#94D2BD",
+                                "Italy" = "darkgrey",
+                                "Canada" = "#F9C74F")) +
+  theme(
+    legend.position = 'none',
+    panel.grid.minor.x = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    axis.title.x = element_text(face = "bold"), 
+    axis.title.y = element_text(face = "bold"), 
+    axis.ticks.x = element_line(size = 2),
+    axis.ticks.y = element_line(size = 2),
+    axis.text.x = element_text(size = 8),
+    plot.title = element_text(face = "bold")
+  ) +
+  facet_wrap(~ Country)
+
+```
+
+------------------------------------------------------------------------
+
+#### Hello! World. Meet the actual real big economies
+
+<p style="font-size: 20px;">
+
+Standings on Purchase Power Parity Terms, 2022
+
+</p>
+
+<p style="font-size: 12px;">
+
+*Source: IMF's World Economic Outlook, Oct 2023*
+
+</p>
+
+```{r}
+
+PPPdata <- read_excel("PPPdata.xlsx")
+
+PPPdata %>%
+  filter(Year == 2022) %>%
+  ggplot(aes(y = NGDPDPC,  x = PPPGDP, color = Country, size = Country_Number)) +
+  geom_point() +
+  geom_text(data = . %>% filter(!(Country %in% c("China", "France", 
+                                                 "Germany", "United Kingdom"))),
+            aes(label = Country, 
+                hjust = -0.3), 
+            color = 'black',  # Specify text color here
+            size = 3) +
+  geom_text(data = . %>% filter((Country %in% c("China", "France", 
+                                                "Germany", "United Kingdom"))), 
+            aes(label = Country, 
+                hjust = 1.3), 
+            color = 'black',  # Specify text color here
+            size = 3) + 
+  labs(
+    x = "PURCHASING POWER PARITY - GDP ($)",
+    y = "PER-CAPITA - GDP ($)"
+  ) +
+  # stat_smooth(method = 'auto', se = FALSE) +
+  theme_bw() +
+  scale_y_continuous(breaks = c(0,25000,50000,75000)) +
+  scale_x_continuous(breaks = c(0,10000,20000,30000)) +
+  scale_color_manual(values = c("United States" = "brown",
+                                "China" = "#ff9900",
+                                "Japan" = "#E9D8A6",
+                                "Germany" = '#A3C4F3',
+                                "India" = "#0077cc",
+                                "United Kingdom" = "#FDE4CF",
+                                "France" = "lightgrey",
+                                "Russia" = "#94D2BD",
+                                "Italy" = "darkgrey",
+                                "Canada" = "#F9C74F")) +
+  theme(
+    legend.position = 'none',
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    axis.title.x = element_text(face = "bold"), 
+    axis.title.y = element_text(face = "bold"), 
+    axis.ticks.x = element_line(size = 2),
+    axis.ticks.y = element_line(size = 2),
+    axis.text.x = element_text(size = 8),
+    axis.text.y = element_text(size = 8),
+    plot.title = element_text(face = "bold")
+  ) +
+  annotate("text", x = 25462.73, y = 76343.25, 
+           label = "2", 
+           size = 3, 
+           color = "white", 
+           fontface = "bold",
+           check_overlap = TRUE) +
+  annotate("text", x = 30217.11, y = 12669.62, 
+           label = "1", 
+           size = 3, 
+           color = "white", 
+           fontface = "bold",
+           check_overlap = TRUE) +
+  annotate("text", x = 11900.71, y = 2391.87, 
+           label = "3", 
+           size = 3, 
+           color = "white", 
+           fontface = "bold",
+           check_overlap = TRUE)
+```
+
+------------------------------------------------------------------------
+
+```{=html}
+<style>
+    .reveal .center {
+        text-align: center;
+        margin-top: 20vh; /* Adjust vertical positioning */
+        margin-right: 20vh;
+        font-size: 3em; /* Adjust font size */
+    }
+</style>
+```
+
+::: center
+```         
+Thank You!
+```
+:::
+
+<p style="font-size: 20px;">
+
+*....please refer to our Tableau Dashboard for more country-specific insights*
+
+</p>
