@@ -1,4 +1,4 @@
-name: r-only-setup
+name: r-only-setup new
 
 on:
   push:
