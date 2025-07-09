@@ -9,10 +9,16 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # This permission is required to push to the gh-pages branch
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      # This new step installs R
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.4' # You can change this to your desired R version
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
