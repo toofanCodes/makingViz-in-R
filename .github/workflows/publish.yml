@@ -6,20 +6,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  publish:
+  build-and-deploy:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      pages: write
-      id-token: write
+      contents: write # This permission is required to push to the gh-pages branch
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # This step installs the latest version of Quarto
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
-      # This step now runs the command directly
-      - name: Publish to GitHub Pages
-        run: quarto publish gh-pages --no-prompt --no-browser
+      - name: Render Website
+        # This command renders your Quarto project into the default '_site' directory
+        run: quarto render
+
+      - name: Deploy to GitHub Pages
+        # This action takes the files from the render step and deploys them to the gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # This is the directory that Quarto rendered the website to
+          publish_dir: ./_site
