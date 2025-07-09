@@ -6,27 +6,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-deploy:
+  publish:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pages: write
       id-token: write
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-
-      - name: Render Quarto Website
-        uses: quarto-dev/quarto-actions/render@v1
-
-      - name: Upload website artifact
-        uses: actions/upload-pages-artifact@v3
+      # This single step now handles setup, rendering, and deployment
+      - name: Publish to GitHub Pages
+        uses: quarto-dev/quarto-actions/publish@v2
         with:
-          path: _site
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          # The GitHub token is required for the action to create the deployment
+          token: ${{ secrets.GITHUB_TOKEN }}
