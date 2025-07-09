@@ -1,0 +1,9 @@
+project:
+  type: website
+
+website:
+  title: "Making Visualizations in R"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
