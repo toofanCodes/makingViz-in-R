@@ -16,9 +16,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # This single step now handles setup, rendering, and deployment
+      - name: Set up Quarto
+        # This step installs the latest version of Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
       - name: Publish to GitHub Pages
-        uses: quarto-dev/quarto-actions/publish@v2
-        with:
-          # The GitHub token is required for the action to create the deployment
-          token: ${{ secrets.GITHUB_TOKEN }}
+        # This step now runs the command directly
+        run: quarto publish gh-pages --no-prompt --no-browser
