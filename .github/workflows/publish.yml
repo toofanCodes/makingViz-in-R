@@ -24,12 +24,28 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
+      - name: Cache R packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/R
+          key: ${{ runner.os }}-r-${{ hashFiles('**/DESCRIPTION') }}
+          restore-keys: |
+            ${{ runner.os }}-r-
+
       - name: Install R packages
         run: |
-          Rscript -e 'install.packages(c("tidyverse", "quarto"), repos = "https://cloud.r-project.org")'
+          Rscript -e 'install.packages("tidyverse", repos = "https://cloud.r-project.org")'
+          # Add other R package installs as needed
+
+      - name: Install Quarto R package (optional, for R <-> Quarto API)
+        run: |
+          Rscript -e 'if (!require("quarto")) install.packages("quarto", repos = "https://cloud.r-project.org")'
 
       - name: Render Quarto project
         run: quarto render .
+
+      - name: Check output directory
+        run: ls -l _site
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
