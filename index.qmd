@@ -68,7 +68,7 @@ library(patchwork)
 library(readxl)
 library(treemap)
 
-data <- read_csv("DVdataset.csv")
+data <- read_csv("data/DVdataset.csv")
 
 dataPivot <- pivot_longer(data, cols = starts_with('2'),
                           names_to = "Year",
@@ -236,7 +236,7 @@ Population trends over the past 2 decades, and current standing
 
 ```{r}
 
-population <- read_csv("population.csv")
+population <- read_csv("data/population.csv")
 
 
 p5 <- ggplot(population, aes(x = Year, y = id)) +
@@ -603,7 +603,7 @@ Plotting the comparative growth of Economies
 </p>
 
 ```{r}
-fdat <- read_csv("percapitaPPP.csv")
+fdat <- read_csv("data/percapitaPPP.csv")
 
 fdatPiv <- pivot_longer(fdat, cols = '2001':'2022',
                         names_to = "Year",
