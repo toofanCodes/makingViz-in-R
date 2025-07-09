@@ -1,36 +1,32 @@
-name: Publish Quarto Website
+name: build-and-deploy
 
 on:
   push:
     branches: [main]
-  workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # This new step installs R
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
-        with:
-          r-version: '4.4' # You can change this to your desired R version
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
-      - name: Render Website
-        # This command renders your Quarto project into the default '_site' directory
+      - name: Install R packages
+        run: |
+          Rscript -e 'install.packages(c("tidyverse", "quarto"))' # Add your packages here
+
+      - name: Render Quarto project
         run: quarto render
 
       - name: Deploy to GitHub Pages
-        # This action takes the files from the render step and deploys them to the gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # This is the directory that Quarto rendered the website to
           publish_dir: ./_site
