@@ -1,11 +1,11 @@
-name: build-and-deploy
+name: r-only-setup
 
 on:
   push:
     branches: [main]
 
 jobs:
-  build:
+  setup-r:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,18 +15,8 @@ jobs:
       - name: Set up R
         uses: r-lib/actions/setup-r@v2
 
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-
-      - name: Install R packages
+      - name: Confirm R installation
         run: |
-          Rscript -e 'install.packages("tidyverse", repos = "https://cloud.r-project.org")'
-
-      - name: Render Quarto project
-        run: quarto render .
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
+          which R
+          which Rscript
+          Rscript -e "R.version.string"
