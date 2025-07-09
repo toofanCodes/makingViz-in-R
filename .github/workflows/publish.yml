@@ -26,7 +26,7 @@ jobs:
 
       - name: Install R packages
         run: |
-          Rscript -e 'install.packages(c("tidyverse", "quarto"), repos = "https://cloud.r-project.org")'
+          Rscript -e 'install.packages(c("tidyverse", "quarto", "vtable", "patchwork", "readxl", "treemap"), repos = "https://cloud.r-project.org")'
 
       - name: Render Quarto project
         run: quarto render .
