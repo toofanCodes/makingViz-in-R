@@ -20,7 +20,7 @@ Visualizing Growth
 
 <p style="font-size: 20px;">
 
-*- Saran - Aditi - Pooja Patil - Pooja Nalam - Pankhuri*
+*- Saran*
 
 </p>
 
@@ -30,25 +30,16 @@ Visualizing Growth
 
 </br>
 
-<p style="font-size: 20px;">
+<p style="font-size: 14px;">GDP: Gross Domestic Product, measures the total value of goods and services produced in a country within a specific time frame, indicating its economic size and activity.</p>
 
-**GDP** : *Gross Domestic Product, measures the total value of goods and services produced in a country within a specific time frame, indicating its economic size and activity.*
+</br>
 
+<p style="font-size: 14px;"> Per-Capita GDP: is the average economic output per person in a country, showing individual wealth on average, basically dividing GDP by population.
 </p>
 
 </br>
 
-<p style="font-size: 20px;">
-
-**Per-Capita GDP** *is the average economic output per person in a country, showing individual wealth on average, basically dividing GDP by population.*
-
-</p>
-
-</br>
-
-<p style="font-size: 20px;">
-
-**Purchase Power Parity** *adjusts GDP for cost of living differences, reflecting real purchasing power across countries.*
+<p style="font-size: 14px;"> Purchase Power Parity: adjusts GDP for cost of living differences, reflecting real purchasing power across countries.
 
 </p>
 
@@ -93,17 +84,13 @@ dataPivot <- dataPivot %>%
 
 #### Which countries contributed most to World's GDP in 2022? And is that all matters?
 
-<p style="font-size: 20px;">
+<p style="font-size: 16px;">
 
 Country's share in global GDP growth, 2022
 
 </p>
 
-<p style="font-size: 12px;">
-
-*Source: IMF's World Economic Outlook, Oct 2023*
-
-</p>
+<p style="font-size: 14px;">Source: IMF's World Economic Outlook, Oct 2023</p>
 
 ```{r}
 gdpShare <- read_excel("data/gdpShare.xlsx")
@@ -130,17 +117,13 @@ gdpShare %>%
 
 #### 21<sup>st</sup> Century saw US sustain its dominance, while emerging Asian powerhouses China and India surge
 
-<p style="font-size: 20px;">
+<p style="font-size: 16px;">
 
 Countries ranked by GDP size
 
 </p>
 
-<p style="font-size: 12px;">
-
-*Source: IMF's World Economic Outlook, Oct 2023*
-
-</p>
+<p style="font-size: 14px;">Source: IMF's World Economic Outlook, Oct 2023</p>
 
 ```{r}
 
@@ -222,17 +205,13 @@ pivot3 %>%
 
 #### What is their populations? If each country looks so different, is it right to compare by their GDP alone?
 
-<p style="font-size: 20px;">
+<p style="font-size: 16px;">
 
 Population trends over the past 2 decades, and current standing
 
 </p>
 
-<p style="font-size: 12px;">
-
-*Source: IMF's World Economic Outlook, Oct 2023*
-
-</p>
+<p style="font-size: 14px;"> Source: IMF's World Economic Outlook, Oct 2023</p>
 
 ```{r}
 
@@ -317,17 +296,9 @@ print(combined_plots)
 
 ##### Beyond sheer GDP numbers, economic prosperity requires a look at per-capita incomes
 
-<p style="font-size: 20px;">
+<p style="font-size: 16px;">Tracking top 10 countries on per-capita GDP, A comparison among peers</p>
 
-Tracking top 10 countries on per-capita GDP, A comparison among peers
-
-</p>
-
-<p style="font-size: 12px;">
-
-*Source: IMF's World Economic Outlook, Oct 2023*
-
-</p>
+<p style="font-size: 14px;"> Source: IMF's World Economic Outlook, Oct 2023</p>
 
 ```{r}
 
@@ -460,17 +431,9 @@ NGPDPC_long %>%
 
 #### Not all countries have had the same trajectory in Inflation, so is it right to compare countries based on GDP?
 
-<p style="font-size: 20px;">
+<p style="font-size: 16px;"> Inflation across countries (% change)</p>
 
-Inflation across countries (% change)
-
-</p>
-
-<p style="font-size: 12px;">
-
-*Source: IMF's World Economic Outlook, Oct 2023*
-
-</p>
+<p style="font-size: 14px;">Source: IMF's World Economic Outlook, Oct 2023</p>
 
 ```{r}
 p1 <- dataPivot %>%
@@ -590,17 +553,9 @@ p3 <- dataPivot %>%
 
 #### A complex yet compelling story - China's ascendancy in Purchasing Power Parity as it surpasses even US
 
-<p style="font-size: 20px;">
+<p style="font-size: 16px;">Plotting the comparative growth of Economies</p>
 
-Plotting the comparative growth of Economies
-
-</p>
-
-<p style="font-size: 12px;">
-
-*Source: IMF's World Economic Outlook, Oct 2023*
-
-</p>
+<p style="font-size: 14px;">Source: IMF's World Economic Outlook, Oct 2023</p>
 
 ```{r}
 fdat <- read_csv("data/percapitaPPP.csv")
@@ -659,17 +614,9 @@ fdatWide %>%
 
 #### Hello! World. Meet the actual real big economies
 
-<p style="font-size: 20px;">
+<p style="font-size: 16px;">Standings on Purchase Power Parity Terms, 2022</p>
 
-Standings on Purchase Power Parity Terms, 2022
-
-</p>
-
-<p style="font-size: 12px;">
-
-*Source: IMF's World Economic Outlook, Oct 2023*
-
-</p>
+<p style="font-size: 14px;">Source: IMF's World Economic Outlook, Oct 2023</p>
 
 ```{r}
 
