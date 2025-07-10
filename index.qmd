@@ -23,8 +23,9 @@ Visualizing Growth
 *                                            - Saran*
 
 </p>
-<p style="font-size: 12px;"> ⇤ use arrow keys to navigate ⇥ </p
 
+<p style="font-size: 14px;"> Data source: IMF's World Economic Outlook, Oct 2023</p>
+<p style="font-size: 12px;"> ⇤ use arrow keys to navigate ⇥ </p
 ------------------------------------------------------------------------
 
 ##### **Data Definitions & Key Words:**
@@ -185,8 +186,6 @@ pivot3 %>%
 
 <p style="font-size: 16px;">Population trends over the past 2 decades, and current standing</p>
 
-<p style="font-size: 14px;"> Source: IMF's World Economic Outlook, Oct 2023</p>
-
 ```{r}
 
 population <- read_csv("data/population.csv")
@@ -272,7 +271,6 @@ print(combined_plots)
 
 <p style="font-size: 16px;">Tracking top 10 countries on per-capita GDP, A comparison among peers</p>
 
-<p style="font-size: 14px;"> Source: IMF's World Economic Outlook, Oct 2023</p>
 
 ```{r}
 
