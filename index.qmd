@@ -23,8 +23,8 @@ Visualizing Growth
                                                     - Saran
 
 </p>
-<p style="font-size: 14px;">Developed in:       R [tidyverse, ggplot2, and treemap]</p
-<p style="font-size: 14px;">Rendered using:     Quarto</p
+<p style="font-size: 14px;">Developed in:       R [tidyverse, ggplot2, and treemap]</p>
+<p style="font-size: 14px;">Rendered using:     Quarto</p>
 <p style="font-size: 14px;">Hosted on:          GitHub Pages.</p>
 <p style="font-size: 14px;"> Data source: IMF's World Economic Outlook, Oct 2023</p>
 <p style="font-size: 14px;"> ⇤ use arrow keys to navigate ⇥ </p>
