@@ -1,6 +1,6 @@
 # Visualizing Growth: Global Economic Data Analysis
 
-[![GitHub Pages Deployment](https://img.shields.io/github/deployments/toofanCodes/makingViz-in-R/production?label=Live%20Site&logo=github)](https://toofancodes.github.io/makingViz-in-R/)
+[![GitHub Pages Deployment](https://img.shields.io/github/deployments/toofanCodes/makingViz-in-R/github-pages?label=Live%20Site&logo=github)](https://toofancodes.github.io/makingViz-in-R/)
 
 **➡️ [View the live website here](https://toofancodes.github.io/makingViz-in-R/) ⬅️**
 
