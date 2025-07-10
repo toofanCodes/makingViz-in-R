@@ -1,6 +1,10 @@
 # Visualizing Growth: Global Economic Data Analysis
 
-This project presents a comprehensive data-driven analysis of global economic growth, population, and prosperity using R and Quarto. The main deliverable is an interactive presentation built with Quarto Reveal.js slides, featuring visualizations of GDP, per-capita GDP, PPP, inflation, and population trends for major world economies.
+[![GitHub Pages Deployment](https://img.shields.io/github/deployments/toofanCodes/makingViz-in-R/production?label=Live%20Site&logo=github)](https://toofancodes.github.io/makingViz-in-R/)
+
+**➡️ [View the live website here](https://toofancodes.github.io/makingViz-in-R/) ⬅️**
+
+This project showcases a set of data visualizations built in R, leveraging the `tidyverse`, `ggplot2`, and `treemap` packages. The final website was generated using Quarto and is hosted on GitHub Pages.
 
 ## Project Structure
 
