@@ -106,7 +106,7 @@ Country's share in global GDP growth, 2022
 </p>
 
 ```{r}
-gdpShare <- read_excel("gdpShare.xlsx")
+gdpShare <- read_excel("data/gdpShare.xlsx")
 
 gdpShare %>%
   filter(Year == '2022') %>%
@@ -148,7 +148,7 @@ legend_order <- c("United States", "China", "Japan",
                   "Germany", "India", "United Kingdom", 
                   "France", "Russia", "Canada", "Italy")
 library(readxl)
-pivot3 <- read_excel("pivot3.xlsx")
+pivot3 <- read_excel("data/pivot3.xlsx")
 
 pivot3 %>%
   filter(!(Country %in% c("Mexico", "Spain", "Brazil"))) %>%
@@ -331,7 +331,7 @@ Tracking top 10 countries on per-capita GDP, A comparison among peers
 
 ```{r}
 
-NGPDPC <- read_excel("NGPDPC.xlsx")
+NGPDPC <- read_excel("data/NGPDPC.xlsx")
 
 NGPDPC_long <- pivot_longer(NGPDPC, 
                             cols = `2001`:`2022`, 
@@ -673,7 +673,7 @@ Standings on Purchase Power Parity Terms, 2022
 
 ```{r}
 
-PPPdata <- read_excel("PPPdata.xlsx")
+PPPdata <- read_excel("data/PPPdata.xlsx")
 
 PPPdata %>%
   filter(Year == 2022) %>%
